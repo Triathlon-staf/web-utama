@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Hub — Beranda</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      background-color: #1a1209;
+      background-image:
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      min-height: 100vh;
+      color: #e8d5a3;
+    }
+
+    .classic-border {
+      border: 2px solid #8b6914;
+      box-shadow: 0 0 0 4px #1a1209, 0 0 0 6px #8b6914, 0 0 20px rgba(139,105,20,0.3);
+    }
+
+    .ornament {
+      color: #c9a84c;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .portal-card {
+      background: linear-gradient(135deg, #2a1f0e 0%, #1f1608 50%, #2a1f0e 100%);
+      border: 1px solid #8b6914;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+
+    .portal-card:hover {
+      border-color: #c9a84c;
+      box-shadow: 0 0 20px rgba(201,168,76,0.3), inset 0 0 20px rgba(201,168,76,0.05);
+      transform: translateY(-3px);
+    }
+
+    .portal-card:hover::before {
+      background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    }
+
+    .gold-btn {
+      background: linear-gradient(180deg, #c9a84c 0%, #8b6914 50%, #c9a84c 100%);
+      color: #1a1209;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      border: 1px solid #ffd700;
+      transition: all 0.3s ease;
+      text-shadow: none;
+    }
+
+    .gold-btn:hover {
+      background: linear-gradient(180deg, #ffd700 0%, #c9a84c 50%, #ffd700 100%);
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+
+    .red-btn {
+      background: linear-gradient(180deg, #8b1a1a 0%, #5a0f0f 50%, #8b1a1a 100%);
+      color: #e8d5a3;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      border: 1px solid #c0392b;
+      transition: all 0.3s ease;
+    }
+
+    .red-btn:hover {
+      background: linear-gradient(180deg, #c0392b 0%, #8b1a1a 50%, #c0392b 100%);
+      box-shadow: 0 0 15px rgba(192,57,43,0.5);
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      color: #c9a84c;
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 10px rgba(201,168,76,0.4);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #8b6914;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .divider::after {
+      content: '✦';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1f1608;
+      padding: 0 0.5rem;
+      color: #c9a84c;
+      font-size: 0.75rem;
+    }
+
+    .header-banner {
+      background: linear-gradient(180deg, #0d0905 0%, #1f1608 40%, #2a1f0e 100%);
+      border-bottom: 3px double #8b6914;
+    }
+
+    .user-bar {
+      background: linear-gradient(90deg, #0d0905, #1a1209, #0d0905);
+      border-bottom: 1px solid #4a3510;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: linear-gradient(135deg, #2a1f0e, #1a1209);
+      border: 2px solid #8b6914;
+      box-shadow: 0 0 0 4px #0d0905, 0 0 0 6px #8b6914, 0 0 40px rgba(139,105,20,0.5);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-input {
+      background: #0d0905;
+      border: 1px solid #4a3510;
+      color: #e8d5a3;
+      font-family: 'Libre Baskerville', serif;
+      transition: border-color 0.2s;
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: #c9a84c;
+      box-shadow: 0 0 8px rgba(201,168,76,0.2);
+    }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-overlay.active { display: flex; }
+
+    .spinner {
+      width: 50px; height: 50px;
+      border: 4px solid #4a3510;
+      border-top-color: #c9a84c;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+    }
+
+    .toast.show { transform: translateX(0); }
+    .toast.success { background: #1a3a1a; border: 1px solid #2e7d32; color: #a5d6a7; }
+    .toast.error { background: #3a1a1a; border: 1px solid #c62828; color: #ef9a9a; }
+    .toast.info { background: #1a2a3a; border: 1px solid #1565c0; color: #90caf9; }
+
+    /* Admin modal */
+    .admin-input {
+      background: #0d0905;
+      border: 1px solid #4a3510;
+      color: #e8d5a3;
+      font-family: 'Libre Baskerville', serif;
+    }
+    .admin-input:focus {
+      outline: none;
+      border-color: #c9a84c;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0d0905; }
+    ::-webkit-scrollbar-thumb { background: #4a3510; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8b6914; }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay active">
+    <div class="text-center">
+      <div class="spinner mx-auto mb-4"></div>
+      <p class="section-title text-sm tracking-widest">MEMUAT...</p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Add Link Modal -->
+  <div id="addModal" class="modal-overlay">
+    <div class="modal-box rounded p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="section-title text-lg">✦ Tambah Portal Baru ✦</h3>
+        <button onclick="closeAddModal()" class="text-gray-500 hover:text-gray-300 text-xl">✕</button>
+      </div>
+      <hr class="divider mb-4">
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">NAMA PORTAL</label>
+          <input id="linkName" type="text" placeholder="Contoh: Google Search" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">URL / ALAMAT</label>
+          <input id="linkUrl" type="url" placeholder="https://www.example.com" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">DESKRIPSI (opsional)</label>
+          <input id="linkDesc" type="text" placeholder="Keterangan singkat..." class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">KATEGORI</label>
+          <select id="linkCategory" class="modal-input w-full rounded px-3 py-2 text-sm">
+            <option value="Umum">Umum</option>
+            <option value="Alat">Alat & Utilitas</option>
+            <option value="Media">Media & Hiburan</option>
+            <option value="Edukasi">Edukasi</option>
+            <option value="Sosial">Sosial & Komunitas</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">IKON (emoji)</label>
+          <input id="linkIcon" type="text" placeholder="🌐" maxlength="5" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+      </div>
+      <div class="mt-5 flex gap-3">
+        <button onclick="saveLink()" class="gold-btn flex-1 py-2 rounded text-sm cursor-pointer">✦ SIMPAN PORTAL</button>
+        <button onclick="closeAddModal()" class="red-btn px-4 py-2 rounded text-sm cursor-pointer">BATAL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Link Modal -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-box rounded p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="section-title text-lg">✦ Edit Portal ✦</h3>
+        <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-300 text-xl">✕</button>
+      </div>
+      <hr class="divider mb-4">
+      <input id="editLinkId" type="hidden"/>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">NAMA PORTAL</label>
+          <input id="editLinkName" type="text" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">URL / ALAMAT</label>
+          <input id="editLinkUrl" type="url" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">DESKRIPSI</label>
+          <input id="editLinkDesc" type="text" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">KATEGORI</label>
+          <select id="editLinkCategory" class="modal-input w-full rounded px-3 py-2 text-sm">
+            <option value="Umum">Umum</option>
+            <option value="Alat">Alat & Utilitas</option>
+            <option value="Media">Media & Hiburan</option>
+            <option value="Edukasi">Edukasi</option>
+            <option value="Sosial">Sosial & Komunitas</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs tracking-widest text-yellow-600 mb-1">IKON (emoji)</label>
+          <input id="editLinkIcon" type="text" maxlength="5" class="modal-input w-full rounded px-3 py-2 text-sm"/>
+        </div>
+      </div>
+      <div class="mt-5 flex gap-3">
+        <button onclick="updateLink()" class="gold-btn flex-1 py-2 rounded text-sm cursor-pointer">✦ PERBARUI</button>
+        <button onclick="closeEditModal()" class="red-btn px-4 py-2 rounded text-sm cursor-pointer">BATAL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER BAR -->
+  <div class="user-bar px-4 py-2 flex justify-between items-center text-xs">
+    <span class="text-yellow-700 tracking-widest font-mono">✦ PORTAL HUB ✦</span>
+    <div class="flex items-center gap-4">
+      <span id="userEmailDisplay" class="text-yellow-600 italic"></span>
+      <button onclick="handleLogout()" class="red-btn px-3 py-1 rounded text-xs cursor-pointer">KELUAR</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header-banner py-10 px-4 text-center">
+    <div class="ornament mb-2">⚜ ✦ ⚜</div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-2" style="font-family:'Cinzel',serif; color:#c9a84c; text-shadow: 0 0 20px rgba(201,168,76,0.5), 2px 2px 4px #000;">
+      PORTAL HUB
+    </h1>
+    <p class="text-sm tracking-widest text-yellow-700 italic" style="font-family:'IM Fell English',serif;">
+      — Gerbang Menuju Berbagai Penjuru Dunia Maya —
+    </p>
+    <div class="ornament mt-2">⚜ ✦ ⚜</div>
+    <div class="mt-6 flex justify-center gap-4 flex-wrap">
+      <button onclick="openAddModal()" class="gold-btn px-6 py-2 rounded text-sm cursor-pointer">
+        ✦ Tambah Portal
+      </button>
+      <button onclick="toggleMyLinks()" id="myLinksBtn" class="px-6 py-2 rounded text-sm cursor-pointer"
+        style="background:linear-gradient(180deg,#1a3a4a,#0d2030);border:1px solid #1e5a7a;color:#90caf9;font-family:'Cinzel',serif;font-weight:700;">
+        📋 Portal Saya
+      </button>
+    </div>
+  </header>
+
+  <hr class="divider mx-8">
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Search Bar -->
+    <div class="mb-8 flex justify-center">
+      <div class="relative w-full max-w-xl">
+        <input id="searchInput" type="text" placeholder="Cari portal..." oninput="filterLinks()"
+          class="modal-input w-full rounded-full px-6 py-3 text-sm pr-12"/>
+        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-yellow-700">🔍</span>
+      </div>
+    </div>
+
+    <!-- Filter Kategori -->
+    <div class="flex gap-2 flex-wrap justify-center mb-8" id="categoryFilter">
+      <button onclick="setCategory('all')" data-cat="all"
+        class="cat-btn active-cat px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#4a3510;border:1px solid #8b6914;color:#e8d5a3;font-family:'Cinzel',serif;">
+        SEMUA
+      </button>
+      <button onclick="setCategory('Umum')" data-cat="Umum"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        UMUM
+      </button>
+      <button onclick="setCategory('Alat')" data-cat="Alat"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        ALAT
+      </button>
+      <button onclick="setCategory('Media')" data-cat="Media"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        MEDIA
+      </button>
+      <button onclick="setCategory('Edukasi')" data-cat="Edukasi"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        EDUKASI
+      </button>
+      <button onclick="setCategory('Sosial')" data-cat="Sosial"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        SOSIAL
+      </button>
+      <button onclick="setCategory('Lainnya')" data-cat="Lainnya"
+        class="cat-btn px-4 py-1 rounded-full text-xs tracking-widest cursor-pointer"
+        style="background:#1a1209;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+        LAINNYA
+      </button>
+    </div>
+
+    <!-- View Toggle: All / My Links -->
+    <div id="viewLabel" class="text-center mb-4">
+      <span class="section-title text-sm tracking-widest" id="currentViewLabel">✦ SEMUA PORTAL ✦</span>
+    </div>
+
+    <!-- Links Grid -->
+    <div id="linksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <!-- Cards injected here -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16">
+      <div class="text-5xl mb-4">🗺️</div>
+      <p class="section-title text-lg mb-2">Belum Ada Portal</p>
+      <p class="text-sm text-yellow-700 italic">Klik "Tambah Portal" untuk menambahkan website pertamamu.</p>
+    </div>
+
+  </main>
+
+  <footer class="text-center py-6 border-t border-yellow-900 mt-8">
+    <div class="ornament mb-1">⚜</div>
+    <p class="text-xs text-yellow-800 tracking-widest" style="font-family:'Cinzel',serif;">PORTAL HUB — MCMXXIV</p>
+    <p class="text-xs text-yellow-900 mt-1 italic" style="font-family:'IM Fell English',serif;">Semua jalan menuju satu gerbang.</p>
+  </footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+  import {
+    getDatabase, ref, push, set, onValue, update, remove, query, orderByChild, equalTo
+  } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0wGQUotPa-BbMkM26XMEXuRP9e3w5Ki0",
+    authDomain: "website-7cf1e.firebaseapp.com",
+    projectId: "website-7cf1e",
+    databaseURL: "https://website-7cf1e-default-rtdb.firebaseio.com",
+    storageBucket: "website-7cf1e.firebasestorage.app",
+    messagingSenderId: "58232236783",
+    appId: "1:58232236783:web:c126504993e70b7b67891a",
+    measurementId: "G-6LLX704LMP"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  let currentUser = null;
+  let allLinks = {};
+  let currentCategory = 'all';
+  let showMyLinks = false;
+
+  // Expose functions to global scope
+  window.handleLogout = async () => {
+    await signOut(auth);
+    window.location.href = 'login.html';
+  };
+
+  window.openAddModal = () => {
+    document.getElementById('addModal').classList.add('active');
+  };
+
+  window.closeAddModal = () => {
+    document.getElementById('addModal').classList.remove('active');
+    document.getElementById('linkName').value = '';
+    document.getElementById('linkUrl').value = '';
+    document.getElementById('linkDesc').value = '';
+    document.getElementById('linkIcon').value = '';
+  };
+
+  window.closeEditModal = () => {
+    document.getElementById('editModal').classList.remove('active');
+  };
+
+  window.saveLink = async () => {
+    const name = document.getElementById('linkName').value.trim();
+    const url = document.getElementById('linkUrl').value.trim();
+    const desc = document.getElementById('linkDesc').value.trim();
+    const category = document.getElementById('linkCategory').value;
+    const icon = document.getElementById('linkIcon').value.trim() || '🌐';
+
+    if (!name || !url) {
+      showToast('Nama dan URL wajib diisi!', 'error');
+      return;
+    }
+
+    let finalUrl = url;
+    if (!/^https?:\/\//i.test(url)) finalUrl = 'https://' + url;
+
+    try {
+      const linksRef = ref(db, 'links');
+      const newRef = push(linksRef);
+      await set(newRef, {
+        name, url: finalUrl, desc, category, icon,
+        owner: currentUser.uid,
+        ownerEmail: currentUser.email,
+        createdAt: Date.now()
+      });
+      showToast('Portal berhasil ditambahkan!', 'success');
+      closeAddModal();
+    } catch (e) {
+      showToast('Gagal menyimpan: ' + e.message, 'error');
+    }
+  };
+
+  window.openEditModal = (id) => {
+    const link = allLinks[id];
+    if (!link) return;
+    document.getElementById('editLinkId').value = id;
+    document.getElementById('editLinkName').value = link.name;
+    document.getElementById('editLinkUrl').value = link.url;
+    document.getElementById('editLinkDesc').value = link.desc || '';
+    document.getElementById('editLinkIcon').value = link.icon || '🌐';
+    document.getElementById('editLinkCategory').value = link.category || 'Umum';
+    document.getElementById('editModal').classList.add('active');
+  };
+
+  window.updateLink = async () => {
+    const id = document.getElementById('editLinkId').value;
+    const name = document.getElementById('editLinkName').value.trim();
+    const url = document.getElementById('editLinkUrl').value.trim();
+    const desc = document.getElementById('editLinkDesc').value.trim();
+    const category = document.getElementById('editLinkCategory').value;
+    const icon = document.getElementById('editLinkIcon').value.trim() || '🌐';
+
+    if (!name || !url) {
+      showToast('Nama dan URL wajib diisi!', 'error');
+      return;
+    }
+
+    try {
+      await update(ref(db, 'links/' + id), { name, url, desc, category, icon });
+      showToast('Portal berhasil diperbarui!', 'success');
+      closeEditModal();
+    } catch (e) {
+      showToast('Gagal memperbarui: ' + e.message, 'error');
+    }
+  };
+
+  window.deleteLink = async (id) => {
+    if (!confirm('Hapus portal ini?')) return;
+    try {
+      await remove(ref(db, 'links/' + id));
+      showToast('Portal dihapus.', 'info');
+    } catch (e) {
+      showToast('Gagal menghapus: ' + e.message, 'error');
+    }
+  };
+
+  window.setCategory = (cat) => {
+    currentCategory = cat;
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      if (btn.dataset.cat === cat) {
+        btn.style.background = '#4a3510';
+        btn.style.color = '#e8d5a3';
+        btn.style.borderColor = '#8b6914';
+      } else {
+        btn.style.background = '#1a1209';
+        btn.style.color = '#8b6914';
+        btn.style.borderColor = '#4a3510';
+      }
+    });
+    renderLinks();
+  };
+
+  window.filterLinks = () => renderLinks();
+
+  window.toggleMyLinks = () => {
+    showMyLinks = !showMyLinks;
+    const btn = document.getElementById('myLinksBtn');
+    const label = document.getElementById('currentViewLabel');
+    if (showMyLinks) {
+      btn.style.background = 'linear-gradient(180deg,#4a3510,#2a1f0e)';
+      btn.style.borderColor = '#8b6914';
+      btn.style.color = '#e8d5a3';
+      label.textContent = '✦ PORTAL SAYA ✦';
+    } else {
+      btn.style.background = 'linear-gradient(180deg,#1a3a4a,#0d2030)';
+      btn.style.borderColor = '#1e5a7a';
+      btn.style.color = '#90caf9';
+      label.textContent = '✦ SEMUA PORTAL ✦';
+    }
+    renderLinks();
+  };
+
+  function renderLinks() {
+    const grid = document.getElementById('linksGrid');
+    const emptyState = document.getElementById('emptyState');
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    grid.innerHTML = '';
+
+    let filtered = Object.entries(allLinks).filter(([id, link]) => {
+      const matchCat = currentCategory === 'all' || link.category === currentCategory;
+      const matchSearch = !search ||
+        link.name.toLowerCase().includes(search) ||
+        (link.desc || '').toLowerCase().includes(search) ||
+        link.url.toLowerCase().includes(search);
+      const matchOwner = !showMyLinks || link.owner === currentUser?.uid;
+      return matchCat && matchSearch && matchOwner;
+    });
+
+    // Sort by newest
+    filtered.sort((a, b) => (b[1].createdAt || 0) - (a[1].createdAt || 0));
+
+    if (filtered.length === 0) {
+      emptyState.classList.remove('hidden');
+      return;
+    }
+    emptyState.classList.add('hidden');
+
+    filtered.forEach(([id, link]) => {
+      const isOwner = currentUser && link.owner === currentUser.uid;
+      const card = document.createElement('div');
+      card.className = 'portal-card rounded p-4 flex flex-col gap-2';
+      card.innerHTML = `
+        <div class="flex items-start gap-3">
+          <span class="text-3xl">${link.icon || '🌐'}</span>
+          <div class="flex-1 min-w-0">
+            <div class="section-title text-sm truncate">${escapeHtml(link.name)}</div>
+            <div class="text-xs text-yellow-800 truncate">${escapeHtml(link.url)}</div>
+          </div>
+        </div>
+        ${link.desc ? `<p class="text-xs text-yellow-700 italic">${escapeHtml(link.desc)}</p>` : ''}
+        <div class="flex items-center justify-between mt-1">
+          <span class="text-xs px-2 py-0.5 rounded-full" style="background:#0d0905;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+            ${escapeHtml(link.category || 'Umum')}
+          </span>
+          <span class="text-xs text-yellow-900 italic">${link.ownerEmail ? link.ownerEmail.split('@')[0] : 'anon'}</span>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <a href="${escapeHtml(link.url)}" target="_blank" rel="noopener"
+            class="gold-btn flex-1 py-1.5 rounded text-xs text-center no-underline"
+            style="display:block;">
+            ➜ Kunjungi
+          </a>
+          ${isOwner ? `
+            <button onclick="openEditModal('${id}')" class="px-2 py-1.5 rounded text-xs cursor-pointer"
+              style="background:#1a2a1a;border:1px solid #2e7d32;color:#a5d6a7;">✏</button>
+            <button onclick="deleteLink('${id}')" class="px-2 py-1.5 rounded text-xs cursor-pointer"
+              style="background:#3a1a1a;border:1px solid #c62828;color:#ef9a9a;">🗑</button>
+          ` : ''}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(text || ''));
+    return div.innerHTML;
+  }
+
+  function showToast(msg, type = 'info') {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = `toast ${type} show`;
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  // Auth listener
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById('loadingOverlay').classList.remove('active');
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+    if (!user.emailVerified) {
+      signOut(auth);
+      window.location.href = 'login.html?verify=1';
+      return;
+    }
+    currentUser = user;
+    document.getElementById('userEmailDisplay').textContent = user.email;
+
+    // Listen to all links realtime
+    const linksRef = ref(db, 'links');
+    onValue(linksRef, (snapshot) => {
+      allLinks = snapshot.val() || {};
+      renderLinks();
+    });
+  });
+</script>
+</body>
+</html>
