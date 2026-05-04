@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Hub — Daftar</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      background-color: #1a1209;
+      background-image:
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      min-height: 100vh;
+      color: #e8d5a3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .register-card {
+      background: linear-gradient(160deg, #2a1f0e 0%, #1a1209 60%, #2a1f0e 100%);
+      border: 2px solid #8b6914;
+      box-shadow: 0 0 0 4px #0d0905, 0 0 0 6px #4a3510, 0 0 40px rgba(139,105,20,0.4);
+      width: 100%;
+      max-width: 440px;
+      border-radius: 4px;
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .register-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+
+    .register-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      color: #c9a84c;
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 10px rgba(201,168,76,0.4);
+    }
+
+    .ornament {
+      color: #c9a84c;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .form-input {
+      background: #0d0905;
+      border: 1px solid #4a3510;
+      color: #e8d5a3;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.875rem;
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 4px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #c9a84c;
+      box-shadow: 0 0 8px rgba(201,168,76,0.25);
+    }
+
+    .form-input::placeholder { color: #4a3510; }
+
+    .form-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: #8b6914;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .gold-btn {
+      background: linear-gradient(180deg, #c9a84c 0%, #8b6914 50%, #c9a84c 100%);
+      color: #1a1209;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.08em;
+      border: 1px solid #ffd700;
+      padding: 0.75rem;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .gold-btn:hover {
+      background: linear-gradient(180deg, #ffd700 0%, #c9a84c 50%, #ffd700 100%);
+      box-shadow: 0 0 15px rgba(255,215,0,0.4);
+    }
+
+    .gold-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #4a3510;
+      position: relative;
+      margin: 1.25rem 0;
+    }
+
+    .divider::after {
+      content: '✦';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1a1209;
+      padding: 0 0.5rem;
+      color: #4a3510;
+      font-size: 0.65rem;
+    }
+
+    .link-classic {
+      color: #8b6914;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .link-classic:hover { color: #c9a84c; text-decoration: underline; }
+
+    .alert-box {
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .alert-error {
+      background: #3a1a1a;
+      border: 1px solid #c62828;
+      color: #ef9a9a;
+    }
+
+    .alert-success {
+      background: #1a3a1a;
+      border: 1px solid #2e7d32;
+      color: #a5d6a7;
+    }
+
+    .alert-info {
+      background: #1a2a3a;
+      border: 1px solid #1565c0;
+      color: #90caf9;
+    }
+
+    .spinner-inline {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid #4a3510;
+      border-top-color: #1a1209;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toggle-pw {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #4a3510;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .toggle-pw:hover { color: #c9a84c; }
+    .pw-wrapper { position: relative; }
+
+    /* Password strength */
+    .pw-strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      transition: width 0.3s, background 0.3s;
+      width: 0%;
+    }
+
+    .pw-strength-wrap {
+      background: #0d0905;
+      height: 4px;
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .strength-weak { background: #c62828; }
+    .strength-fair { background: #f57c00; }
+    .strength-good { background: #ffd700; }
+    .strength-strong { background: #2e7d32; }
+
+    /* Success state */
+    #successPanel { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="text-center mb-6">
+    <div class="ornament mb-1">⚜ ✦ ⚜</div>
+    <h1 class="section-title text-3xl font-bold">PORTAL HUB</h1>
+    <p class="text-xs text-yellow-800 italic mt-1" style="font-family:'IM Fell English',serif;">
+      — Gerbang Menuju Berbagai Penjuru Dunia Maya —
+    </p>
+  </div>
+
+  <div class="register-card">
+
+    <!-- REGISTER FORM -->
+    <div id="registerPanel">
+      <h2 class="section-title text-xl text-center mb-1">DAFTAR AKUN</h2>
+      <p class="text-center text-xs text-yellow-800 italic mb-4" style="font-family:'IM Fell English',serif;">Buat akun baru untuk memasuki gerbang</p>
+      <hr class="divider">
+
+      <div id="alertBox" class="alert-box"></div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="form-label">NAMA TAMPILAN</label>
+          <input id="displayName" type="text" placeholder="Nama Anda" class="form-input" autocomplete="name"/>
+        </div>
+        <div>
+          <label class="form-label">ALAMAT SUREL</label>
+          <input id="email" type="email" placeholder="nama@domain.com" class="form-input" autocomplete="email"/>
+          <p class="text-xs text-yellow-900 mt-1 italic" style="font-family:'IM Fell English',serif;">
+            * Gunakan surel aktif — tautan verifikasi akan dikirim
+          </p>
+        </div>
+        <div>
+          <label class="form-label">KATA SANDI</label>
+          <div class="pw-wrapper">
+            <input id="password" type="password" placeholder="Min. 8 karakter" class="form-input"
+              oninput="checkStrength(this.value)" style="padding-right:2.5rem;" autocomplete="new-password"/>
+            <span class="toggle-pw" onclick="togglePw('password', this)">👁</span>
+          </div>
+          <div class="pw-strength-wrap mt-2">
+            <div id="pwBar" class="pw-strength-bar"></div>
+          </div>
+          <p id="pwStrengthLabel" class="text-xs mt-1 text-yellow-900"></p>
+        </div>
+        <div>
+          <label class="form-label">KONFIRMASI KATA SANDI</label>
+          <div class="pw-wrapper">
+            <input id="passwordConfirm" type="password" placeholder="Ulangi kata sandi" class="form-input"
+              style="padding-right:2.5rem;" autocomplete="new-password"/>
+            <span class="toggle-pw" onclick="togglePw('passwordConfirm', this)">👁</span>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="flex items-start gap-2 mt-1">
+          <input id="agreeTerms" type="checkbox" class="mt-1 cursor-pointer" style="accent-color:#c9a84c;"/>
+          <label for="agreeTerms" class="text-xs text-yellow-800 cursor-pointer leading-relaxed">
+            Saya menyetujui syarat penggunaan Portal Hub dan memahami bahwa surel verifikasi akan dikirim ke alamat yang saya berikan.
+          </label>
+        </div>
+
+        <button id="registerBtn" onclick="doRegister()" class="gold-btn">
+          ✦ BUAT AKUN
+        </button>
+      </div>
+
+      <hr class="divider">
+
+      <p class="text-center text-xs text-yellow-800">
+        Sudah punya akun?
+        <a href="login.html" class="link-classic ml-1">Masuk di sini</a>
+      </p>
+    </div>
+
+    <!-- SUCCESS PANEL -->
+    <div id="successPanel">
+      <div class="text-center">
+        <div class="text-6xl mb-4">📬</div>
+        <h2 class="section-title text-xl mb-2">VERIFIKASI SUREL</h2>
+        <hr class="divider">
+        <p class="text-sm text-yellow-700 leading-relaxed mb-4" style="font-family:'IM Fell English',serif;">
+          Akun berhasil dibuat! Tautan verifikasi telah dikirim ke surel Anda.
+        </p>
+        <div id="sentEmailDisplay" class="px-3 py-2 rounded text-sm font-mono text-yellow-400 mb-4"
+          style="background:#0d0905;border:1px solid #4a3510;word-break:break-all;"></div>
+        <p class="text-xs text-yellow-800 italic mb-6" style="font-family:'IM Fell English',serif;">
+          Klik tautan di surel tersebut, lalu masuk ke Portal Hub. Jika tidak menerima surel, periksa folder spam Anda.
+        </p>
+
+        <div id="resendAlert" class="alert-box mb-4"></div>
+
+        <div class="space-y-3">
+          <a href="login.html" class="gold-btn block text-center" style="text-decoration:none; display:block;">
+            ✦ MENUJU HALAMAN MASUK
+          </a>
+          <button onclick="resendVerification()" id="resendBtn"
+            class="w-full py-2 rounded text-xs cursor-pointer"
+            style="background:#0d0905;border:1px solid #4a3510;color:#8b6914;font-family:'Cinzel',serif;">
+            🔄 Kirim ulang surel verifikasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="text-xs text-yellow-900 mt-6 text-center" style="font-family:'Cinzel',serif;">PORTAL HUB © MCMXXIV</p>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, sendEmailVerification,
+    updateProfile, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0wGQUotPa-BbMkM26XMEXuRP9e3w5Ki0",
+    authDomain: "website-7cf1e.firebaseapp.com",
+    projectId: "website-7cf1e",
+    databaseURL: "https://website-7cf1e-default-rtdb.firebaseio.com",
+    storageBucket: "website-7cf1e.firebasestorage.app",
+    messagingSenderId: "58232236783",
+    appId: "1:58232236783:web:c126504993e70b7b67891a",
+    measurementId: "G-6LLX704LMP"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  let createdUser = null;
+
+  // Redirect if already logged in and verified
+  onAuthStateChanged(auth, (user) => {
+    if (user && user.emailVerified) {
+      window.location.href = 'index.html';
+    }
+  });
+
+  window.togglePw = (id, el) => {
+    const input = document.getElementById(id);
+    if (input.type === 'password') { input.type = 'text'; el.textContent = '🙈'; }
+    else { input.type = 'password'; el.textContent = '👁'; }
+  };
+
+  window.checkStrength = (pw) => {
+    const bar = document.getElementById('pwBar');
+    const label = document.getElementById('pwStrengthLabel');
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (pw.length >= 12) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+    const levels = [
+      { label: '', pct: '0%', cls: '' },
+      { label: 'Lemah', pct: '25%', cls: 'strength-weak' },
+      { label: 'Cukup', pct: '50%', cls: 'strength-fair' },
+      { label: 'Baik', pct: '75%', cls: 'strength-good' },
+      { label: 'Kuat', pct: '100%', cls: 'strength-strong' },
+      { label: 'Sangat Kuat', pct: '100%', cls: 'strength-strong' },
+    ];
+
+    const lvl = levels[Math.min(score, 5)];
+    bar.style.width = lvl.pct;
+    bar.className = 'pw-strength-bar ' + lvl.cls;
+    label.textContent = pw.length > 0 ? 'Kekuatan sandi: ' + lvl.label : '';
+    label.style.color = score <= 1 ? '#ef9a9a' : score <= 2 ? '#ffb74d' : score <= 3 ? '#ffd700' : '#a5d6a7';
+  };
+
+  window.doRegister = async () => {
+    const name = document.getElementById('displayName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pw = document.getElementById('password').value;
+    const pwc = document.getElementById('passwordConfirm').value;
+    const agreed = document.getElementById('agreeTerms').checked;
+    const btn = document.getElementById('registerBtn');
+
+    clearAlert('alertBox');
+
+    if (!name) {
+      showAlert('alertBox', 'alert-error', '⚠ Nama tampilan wajib diisi.');
+      return;
+    }
+    if (!email) {
+      showAlert('alertBox', 'alert-error', '⚠ Alamat surel wajib diisi.');
+      return;
+    }
+    if (!validateEmail(email)) {
+      showAlert('alertBox', 'alert-error', '⚠ Format surel tidak valid.');
+      return;
+    }
+    if (pw.length < 8) {
+      showAlert('alertBox', 'alert-error', '⚠ Kata sandi minimal 8 karakter.');
+      return;
+    }
+    if (pw !== pwc) {
+      showAlert('alertBox', 'alert-error', '⚠ Konfirmasi kata sandi tidak cocok.');
+      return;
+    }
+    if (!agreed) {
+      showAlert('alertBox', 'alert-error', '⚠ Anda harus menyetujui syarat penggunaan.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-inline"></span> Mendaftarkan...';
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pw);
+      createdUser = cred.user;
+
+      // Update display name
+      await updateProfile(createdUser, { displayName: name });
+
+      // Save user data to Realtime Database
+      await set(ref(db, 'users/' + createdUser.uid), {
+        displayName: name,
+        email: email,
+        createdAt: Date.now(),
+        role: 'user'
+      });
+
+      // Send verification email
+      await sendEmailVerification(createdUser);
+
+      // Sign out immediately — user must verify first
+      await signOut(auth);
+
+      // Show success panel
+      document.getElementById('registerPanel').style.display = 'none';
+      document.getElementById('successPanel').style.display = 'block';
+      document.getElementById('sentEmailDisplay').textContent = email;
+
+    } catch (e) {
+      showAlert('alertBox', 'alert-error', '✕ ' + translateError(e.code));
+      btn.disabled = false;
+      btn.innerHTML = '✦ BUAT AKUN';
+    }
+  };
+
+  window.resendVerification = async () => {
+    const btn = document.getElementById('resendBtn');
+    clearAlert('resendAlert');
+
+    // Re-login temporarily is not possible without password here,
+    // so we guide the user to use the login page and trigger resend there.
+    showAlert('resendAlert', 'alert-info',
+      '📧 Jika Anda belum menerima surel verifikasi, silakan coba daftar ulang atau hubungi dukungan.');
+  };
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function showAlert(id, cls, msg) {
+    const el = document.getElementById(id);
+    el.className = 'alert-box ' + cls;
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function clearAlert(id) {
+    const el = document.getElementById(id);
+    el.style.display = 'none';
+    el.textContent = '';
+    el.className = 'alert-box';
+  }
+
+  function translateError(code) {
+    const map = {
+      'auth/email-already-in-use': 'Surel ini sudah terdaftar. Coba masuk atau gunakan surel lain.',
+      'auth/invalid-email': 'Format surel tidak valid.',
+      'auth/weak-password': 'Kata sandi terlalu lemah. Gunakan minimal 6 karakter.',
+      'auth/operation-not-allowed': 'Pendaftaran dengan surel dinonaktifkan.',
+      'auth/network-request-failed': 'Gagal terhubung. Periksa koneksi internet Anda.',
+      'auth/too-many-requests': 'Terlalu banyak percobaan. Coba lagi nanti.',
+    };
+    return map[code] || 'Terjadi kesalahan. (' + code + ')';
+  }
+</script>
+</body>
+</html>
